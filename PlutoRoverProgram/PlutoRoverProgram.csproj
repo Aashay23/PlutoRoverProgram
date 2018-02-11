@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="Test.cs" />
     <Compile Include="PlutoRoverProgram.cs" />
+    <Compile Include="Rover.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
