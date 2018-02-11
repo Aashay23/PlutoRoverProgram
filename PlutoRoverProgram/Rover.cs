@@ -3,6 +3,8 @@ namespace PlutoRoverProgram
 {
     public class Rover
     {
+        private PlanetSurface _surface;
+
         public const string FacingNorth = "N";
         public const string FacingEast = "E";
         public const string FacingWest = "W";
@@ -12,7 +14,6 @@ namespace PlutoRoverProgram
         public const char Backward = 'B';
         public const char Left = 'L';
         public const char Right = 'R';
-
 
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
@@ -25,12 +26,20 @@ namespace PlutoRoverProgram
             this.DirectionFacing = FacingNorth;
         }
 
-        public Rover(int x, int y, string direction)
+        //public Rover(int x, int y, string direction)
+        //{
+        //    this.XCoordinate = x;
+        //    this.YCoordinate = y;
+        //    this.DirectionFacing = direction;
+        //}
+
+        public Rover(int x, int y, string direction, PlanetSurface surface)
         {
             this.XCoordinate = x;
             this.YCoordinate = y;
             this.DirectionFacing = direction;
 
+            _surface = surface;
         }
 
         public void ExecuteCommand(string instructions)
@@ -59,19 +68,24 @@ namespace PlutoRoverProgram
 
         private void moveRoverForward()
         {
+            int nextXCoordinate = _surface.peekNextXCoordinate(this.XCoordinate);
+            int prevXCoordinate = _surface.peekPrevXCoordinate(this.XCoordinate);
+            int nextYCoordinate = _surface.peekNextYCoordinate(this.YCoordinate);
+            int prevYCoordinate = _surface.peekPrevYCoordinate(this.YCoordinate);
+
             switch (this.DirectionFacing)
             {
                 case FacingNorth:
-                    this.YCoordinate += 1;
+                    this.YCoordinate = nextYCoordinate;
                     break;
                 case FacingEast:
-                    this.XCoordinate += 1;
+                    this.XCoordinate = nextXCoordinate;
                     break;
                 case FacingWest:
-                    this.XCoordinate -= 1;
+                    this.XCoordinate = prevXCoordinate;
                     break;
                 case FacingSouth:
-                    this.YCoordinate -= 1;
+                    this.YCoordinate = prevYCoordinate;
                     break;
                 default:
                     break;
@@ -80,19 +94,24 @@ namespace PlutoRoverProgram
 
         private void moveRoverBackward()
         {
+            int nextXCoordinate = _surface.peekNextXCoordinate(this.XCoordinate);
+            int prevXCoordinate = _surface.peekPrevXCoordinate(this.XCoordinate);
+            int nextYCoordinate = _surface.peekNextYCoordinate(this.YCoordinate);
+            int prevYCoordinate = _surface.peekPrevYCoordinate(this.YCoordinate);
+
             switch (this.DirectionFacing)
             {
                 case FacingNorth:
-                    this.YCoordinate -= 1;
+                    this.YCoordinate = prevYCoordinate;
                     break;
                 case FacingEast:
-                    this.XCoordinate -= 1;
+                    this.XCoordinate = prevXCoordinate;
                     break;
                 case FacingWest:
-                    this.XCoordinate += 1;
+                    this.XCoordinate = nextXCoordinate;
                     break;
                 case FacingSouth:
-                    this.YCoordinate += 1;
+                    this.YCoordinate = nextYCoordinate;
                     break;
                 default:
                     break;

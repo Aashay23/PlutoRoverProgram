@@ -34,6 +34,8 @@
     <Compile Include="Test.cs" />
     <Compile Include="PlutoRoverProgram.cs" />
     <Compile Include="Rover.cs" />
+    <Compile Include="PlanetSurface.cs" />
+    <Compile Include="IRover.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
