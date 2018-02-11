@@ -15,10 +15,11 @@ namespace PlutoRoverProgram
 
         [TestCase(0, 0, "N", "FFFBB", 0, 1, "N")]
         [TestCase(5, 10, "E", "BBBFFFF", 6, 10, "E")]
-        public void Test_MovingRoverForwardAndBackwardFromInstructions(int xCoord, int yCoord, string direction, string instructions, int finalXCoord, int finalYCoord, string finalDirection)
+        [TestCase(0, 0, "N", "FFRFF", 2, 2, "E")]
+        [TestCase(25, 5, "S", "LBBBBBLFFFFFLLLR", 20, 10, "S")]
+        public void Test_MovingRoverFromInstructions(int xCoord, int yCoord, string direction, string instructions, int finalXCoord, int finalYCoord, string finalDirection)
         {
             Rover plutoRover = new Rover(xCoord, yCoord, direction);
-            //string instructions = "FFFBB";
             plutoRover.ExecuteCommand(instructions);
 
             Rover finalLocationOfPlutoRover = new Rover(finalXCoord, finalYCoord, finalDirection);
