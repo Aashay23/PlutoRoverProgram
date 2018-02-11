@@ -9,7 +9,7 @@ namespace PlutoRoverProgram
         [TestCase(1,23,"S", 5, 5)]
         public void Test_RoverInitialization(int xCoord, int yCoord, string direction, int surfaceXMax, int surfaceYMax)
         {
-            int[,] surface = new int[surfaceXMax, surfaceYMax];
+            string[,] surface = new string[surfaceXMax, surfaceYMax];
             PlanetSurface planetSurface = new PlanetSurface(surface);
 
             Rover rover1 = new Rover(xCoord, yCoord, direction, planetSurface);
@@ -24,7 +24,7 @@ namespace PlutoRoverProgram
         [TestCase(10, 7, "N", 11, 11, "FFFFFRFFBLB", 0, 0, "N")]
         public void Test_MovingRoverFromInstructions(int xCoord, int yCoord, string direction, int surfaceXMax, int surfaceYMax, string instructions, int finalXCoord, int finalYCoord, string finalDirection)
         {
-            int[,] surface = new int[surfaceXMax, surfaceYMax];
+            string[,] surface = new string[surfaceXMax, surfaceYMax];
             PlanetSurface planetSurface = new PlanetSurface(surface);
 
             Rover plutoRover = new Rover(xCoord, yCoord, direction, planetSurface);
@@ -36,5 +36,25 @@ namespace PlutoRoverProgram
                            plutoRover.YCoordinate == finalLocationOfPlutoRover.YCoordinate && 
                            plutoRover.DirectionFacing == finalLocationOfPlutoRover.DirectionFacing));
         }
+
+        [TestCase(0, 0, "N", 5, 5, "FFRFFB", 2, 2, 1, 2, "E")]
+        [TestCase(5, 10, "E", 20, 20, "BBBFFFF", 6, 10, 5, 10, "E")]
+        [TestCase(10, 7, "N", 11, 11, "FFFFFRFFBLB", 6, 7, 0, 0, "N")]
+        public void Test_ObstacleDetection(int xCoord, int yCoord, string direction, int surfaceXMax, int surfaceYMax, string instructions, int obstacleX, int obstacleY, int finalXCoord, int finalYCoord, string finalDirection)
+        {
+            string[,] surface = new string[surfaceXMax, surfaceYMax];
+            surface[obstacleX, obstacleY] = "X";
+            PlanetSurface planetSurface = new PlanetSurface(surface);
+
+            Rover plutoRover = new Rover(xCoord, yCoord, direction, planetSurface);
+            plutoRover.ExecuteCommand(instructions);
+
+            Rover finalLocationOfPlutoRover = new Rover(finalXCoord, finalYCoord, finalDirection, planetSurface);
+
+            Assert.IsTrue((plutoRover.XCoordinate == finalLocationOfPlutoRover.XCoordinate &&
+                           plutoRover.YCoordinate == finalLocationOfPlutoRover.YCoordinate &&
+                           plutoRover.DirectionFacing == finalLocationOfPlutoRover.DirectionFacing));
+        }
+
     }
 }

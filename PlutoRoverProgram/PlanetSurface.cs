@@ -3,9 +3,9 @@ namespace PlutoRoverProgram
 {
     public class PlanetSurface
     {
-        public int[,] Topography { get; set; }
+        public string[,] Topography { get; set; }
 
-        public PlanetSurface(int [,] topography)
+        public PlanetSurface(string[,] topography)
         {
             this.Topography = topography;
         }

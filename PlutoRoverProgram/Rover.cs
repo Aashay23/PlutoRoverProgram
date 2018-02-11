@@ -10,6 +10,11 @@ namespace PlutoRoverProgram
         public const string FacingWest = "W";
         public const string FacingSouth = "S";
 
+        public const string ObstacleLocation = "X";
+        public const string ReceivedInstructions = "Received instructions";
+        public const string MoveSuccessful = "Move successful";
+        public const string ObstacleFound = "Obstacle found";
+
         public const char Forward = 'F';
         public const char Backward = 'B';
         public const char Left = 'L';
@@ -18,6 +23,7 @@ namespace PlutoRoverProgram
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
         public string DirectionFacing { get; set; }
+        public string Message { get; set; }
 
         public Rover()
         {
@@ -49,25 +55,32 @@ namespace PlutoRoverProgram
                 switch (command)
                 {
                     case Forward:
-                        moveRoverForward();
+                        this.Message = moveRoverForward();
                         break;
                     case Backward:
-                        moveRoverBackward();
+                        this.Message = moveRoverBackward();
                         break;
                     case Left:
-                        turnRoverLeft();
+                        this.Message = turnRoverLeft();
                         break;
                     case Right:
-                        turnRoverRight();
+                        this.Message = turnRoverRight();
                         break;
                     default:
                         break;
                 }
+
+                if(this.Message != MoveSuccessful)
+                {
+                    return;
+                }
             }
         }
 
-        private void moveRoverForward()
+        private string moveRoverForward()
         {
+            string roverMessage = MoveSuccessful;
+
             int nextXCoordinate = _surface.peekNextXCoordinate(this.XCoordinate);
             int prevXCoordinate = _surface.peekPrevXCoordinate(this.XCoordinate);
             int nextYCoordinate = _surface.peekNextYCoordinate(this.YCoordinate);
@@ -76,24 +89,52 @@ namespace PlutoRoverProgram
             switch (this.DirectionFacing)
             {
                 case FacingNorth:
-                    this.YCoordinate = nextYCoordinate;
+                    if(_surface.Topography[this.XCoordinate, nextYCoordinate] != ObstacleLocation)
+                    {
+                        this.YCoordinate = nextYCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + this.XCoordinate + "-" + nextYCoordinate;
+                    }
                     break;
                 case FacingEast:
-                    this.XCoordinate = nextXCoordinate;
+                    if(_surface.Topography[nextXCoordinate, this.YCoordinate] != ObstacleLocation)
+                    {
+                        this.XCoordinate = nextXCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + nextXCoordinate + "-" + this.YCoordinate;
+                    }
                     break;
                 case FacingWest:
-                    this.XCoordinate = prevXCoordinate;
+                    if(_surface.Topography[prevXCoordinate, this.YCoordinate] != ObstacleLocation)
+                    {
+                        this.XCoordinate = prevXCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + prevXCoordinate + "-" + this.YCoordinate;
+                    }
                     break;
                 case FacingSouth:
-                    this.YCoordinate = prevYCoordinate;
+                    if(_surface.Topography[this.XCoordinate, prevYCoordinate] != ObstacleLocation)
+                    {
+                        this.YCoordinate = prevYCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + this.XCoordinate + "-" + prevYCoordinate;
+                    }
                     break;
                 default:
                     break;
             }
+
+            return roverMessage;
         }
 
-        private void moveRoverBackward()
+        private string moveRoverBackward()
         {
+            string roverMessage = MoveSuccessful;
+
             int nextXCoordinate = _surface.peekNextXCoordinate(this.XCoordinate);
             int prevXCoordinate = _surface.peekPrevXCoordinate(this.XCoordinate);
             int nextYCoordinate = _surface.peekNextYCoordinate(this.YCoordinate);
@@ -102,23 +143,49 @@ namespace PlutoRoverProgram
             switch (this.DirectionFacing)
             {
                 case FacingNorth:
-                    this.YCoordinate = prevYCoordinate;
+                    if(_surface.Topography[this.XCoordinate, prevYCoordinate] != ObstacleLocation)
+                    {
+                        this.YCoordinate = prevYCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + this.XCoordinate + "-" + prevYCoordinate;
+                    }
                     break;
                 case FacingEast:
-                    this.XCoordinate = prevXCoordinate;
+                    if(_surface.Topography[prevXCoordinate, this.YCoordinate] != ObstacleLocation)
+                    {
+                        this.XCoordinate = prevXCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + prevXCoordinate + "-" + this.YCoordinate;
+                    }
                     break;
                 case FacingWest:
-                    this.XCoordinate = nextXCoordinate;
+                    if (_surface.Topography[nextXCoordinate, this.YCoordinate] != ObstacleLocation)
+                    {
+                        this.XCoordinate = nextXCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + nextXCoordinate + "-" + this.YCoordinate;
+                    }
                     break;
                 case FacingSouth:
-                    this.YCoordinate = nextYCoordinate;
+                    if (_surface.Topography[this.XCoordinate, nextYCoordinate] != ObstacleLocation)
+                    {
+                        this.YCoordinate = nextYCoordinate;
+                    }else
+                    {
+                        roverMessage = "Obstacle found at " + this.XCoordinate + "-" + nextYCoordinate;
+                    }
                     break;
                 default:
                     break;
             }
+
+            return roverMessage;
         }
 
-        private void turnRoverLeft()
+        private string turnRoverLeft()
         {
             switch (this.DirectionFacing)
             {
@@ -137,9 +204,11 @@ namespace PlutoRoverProgram
                 default:
                     break;
             }
+
+            return MoveSuccessful;
         }
 
-        private void turnRoverRight()
+        private string turnRoverRight()
         {
             switch (this.DirectionFacing)
             {
@@ -158,6 +227,8 @@ namespace PlutoRoverProgram
                 default:
                     break;
             }
+
+            return MoveSuccessful;
         }
     }
 }
